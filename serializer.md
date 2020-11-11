@@ -63,16 +63,8 @@
           fields = '__all__'
   
       def create(self, validated_data):
-          parent_obj = validated_data.get("parent_id")
-          data = {
-              "department_name": validated_data.get('department_name'),
-              "description": validated_data.get('description'),
-              "parent_id": validated_data.get("parent_id"),
-              "parent_name": parent_obj.department_name if parent_obj else "企业",
-              "dep_path": f'{parent_obj.dep_path}.'.lstrip('.') if parent_obj else "."
-          }
           return Department.objects.create(**data)
   ```
-
+  
   
 
