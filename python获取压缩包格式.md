@@ -4,7 +4,7 @@
   def detect_compression(fname):
       """
       获取解压文件的参数
-  
+   
       :param fname: 文件绝对路径
       :return:
       """
