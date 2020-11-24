@@ -16,32 +16,32 @@
 
 所有被标记为锁定版本的软件包都不能被自动安装，升级或者移除。这将可能会在升级过程中造成问题。想要检查你的系统上是否有被锁住版本的软件包：
 
-```text
+```shell
 sudo apt-mark showhold
 ```
 
 如果有`on hold`，软件包，你应该考虑使用下面的命令，解锁这些软件包:
 
-```text
+```shell
 sudo apt-mark unhold package_name
 ```
 
 刷新APT 列表，并且升级所有的已安装软件包：
 
-```text
+```shell
 sudo apt update
 sudo apt upgrade
 ```
 
 如果内核被升级，重启机器，并且一旦启动完成，重新登录进去：
 
-```text
+```shell
 sudo systemctl reboot
 ```
 
 对于所有已经安装的软件包执行一个主要版本升级：
 
-```text
+```shell
 sudo apt full-upgrade
 ```
 
@@ -49,7 +49,7 @@ sudo apt full-upgrade
 
 移除任何被自动安装的，但是不再被任何包所依赖的软件包：
 
-```text
+```shell
 sudo apt --purge autoremove
 ```
 
@@ -63,13 +63,13 @@ sudo apt --purge autoremove
 
 `do-release-upgrade`是 “update-manager-core” 软件包的一部分，而该软件包在大多数的 Ubuntu 系统上都已经默认安装了。如果因为一些原因，在你的系统上，该软件包没有被安装，通过下面的命令安装它：
 
-```text
+```shell
 sudo apt install update-manager-core
 ```
 
 开始升级，输入：
 
-```text
+```shell
 sudo do-release-upgrade
 ```
 
@@ -85,7 +85,7 @@ sudo do-release-upgrade
 
 你可以输入下面的命令，检查 Ubuntu 版本：
 
-```text
+```shell
 lsb_release -a
 ```
 
@@ -103,7 +103,7 @@ Codename:	focal
 
 
 
-## ****、鼠标键盘无法使用
+## ***、鼠标键盘无法使用
 ```bash
 sudo apt install xserver-xorg-input-all 
 ```
