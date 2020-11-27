@@ -18,7 +18,7 @@
   
       elif ''.join([hex(ord(c)) for c in header[0: 2]]) == '0x1f0x8b':
           print('-zxf .tar.gz')
-          return ['-zxf']
+          return ['-zxvf']
   
       elif header[1: 5] == '7zXZ' and ord(header[0]) == 253:
           print('-Jxf .tar.xz')
