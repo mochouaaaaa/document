@@ -1,5 +1,17 @@
 ​	
 
+###  宿主机安装mysql client
+
+```bash
+sudo apt-get install mysql-client
+sudo apt-get install libmysqlclient-dev
+sudo pip install mysqlclient
+```
+
+
+
+
+
 ### mysql创建用户、授权
 
 - 创建用户

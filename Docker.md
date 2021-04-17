@@ -47,3 +47,8 @@ docker run -itd --name mariadb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=P@ssw0rd -v /
 docker run --name myadmin -d --link mysql_db_server:db -p 8080:80 -e PMA_ARBITRARY=1 phpmyadmin/phpmyadmin
 ```
 
+
+### Dokcer搭建ftp服务器
+```bash
+docker run -itd --name ftp -v /home/nan/code:/home/vsftpd  -p 20:20 -p 21:21 -p 47400-47470:47400-47470 -e FTP_USER=nan -e FTP_PASS=P@ssw0rd -e PASV_ADDRESS=0.0.0.0 --restart=always bogem/ftp
+```
