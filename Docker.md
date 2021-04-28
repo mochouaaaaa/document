@@ -102,5 +102,12 @@ docker run --name mongodb -v ~/docker_data/mongodb:/data/db -p 27017:27017 -d 99
 docker exec -it mongodb mongo admin
 db.createUser({ user: 'admin', pwd: 'P@ssw0rd', roles: [ { role: "userAdminAnyDatabase", db: "admin" } ] });
 mongodb://admin:P%40ssw0rd@127.0.0.1:27017  # 需要16进制转义
+db.createUser(
+     {
+       user:"root",
+       pwd:"P@ssw0rd",
+       roles:[{role:"root",db:"admin"}]
+     }
+  )
 ```
 
