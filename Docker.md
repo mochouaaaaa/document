@@ -93,3 +93,13 @@ smbpasswd -a admin
 docker run -itd --name mongoadmin --network host -e HOST=0.0.0.0 -e PORT=1234 mrvautin/adminmongo
 ```
 
+
+
+### Docker 搭建MongoDB
+
+```bash
+docker run --name mongodb -v ~/docker_data/mongodb:/data/db -p 27017:27017 -d 995ccc33e58f --auth
+docker exec -it mongodb mongo admin
+db.createUser({ user: 'admin', pwd: 'P@ssw0rd', roles: [ { role: "userAdminAnyDatabase", db: "admin" } ] });
+```
+
