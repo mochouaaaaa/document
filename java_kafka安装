@@ -1,0 +1,129 @@
+
+
+### 软件包下载地址
+
+```bash
+## smb共享: 172.20.3.201  
+## 账号密码：
+## admin:P@ssw0rd
+```
+
+
+
+
+
+### java安装
+
+```bash
+tar -xzvf jdk-8u291-linux-x64.tar.gz  ### 解压
+
+### 在/etc/profile添加，这是全局用户生效
+export JAVA_HOME=/{java_path}/jdk1.8.0_291
+export PATH=$JAVA_HOME/bin:$PATH
+
+### 省的麻烦 启动kafka时找不到java  或者修改kafka启动sh脚本添加java 路径变量
+ln -s /{java_path}/jdk1.8.0_291/bin/java /usr/bin/java
+```
+
+
+
+
+
+### zookeeper下载安装
+
+```bash
+### 注意： 一定要带bin 的bin包 否则提示 Client address: localhost. Client SSL: false. Error contacting
+wget https://downloads.apache.org/zookeeper/zookeeper-3.5.9/apache-zookeeper-3.5.9-bin.tar.gz
+### 进入解压后的文件夹 conf 目录下，拷贝配置文件
+cp zoo_sample.cfg zoo.cfg
+### 创建data、datalog两个文件夹（名称无所谓）
+cd ../
+mkdir data data_log
+### 添加配置项
+vim conf/zoo.cfg
+dataDir=/root/kafka_install/apache-zookeeper-3.5.9-bin/data
+dataLogDir=/root/kafka_install/apache-zookeeper-3.5.9-bin/data_log
+### 添加环境变量
+ZOOKEEPER_HOME=/{kafka_path}/apache-zookeeper-3.5.9-bin
+export PATH=$PATH:$ZOOKEEPER_HOME
+### 使配置生效
+source /etc/profile
+### 测试zookeeper
+cd bin
+./zkServer.sh start
+### netstate -ntpl 查看2181端口
+
+目前存在的问题一直提示Client SSL: false 但是服务正常启动
+```
+
+
+
+
+
+### kafka下载安装
+
+```bash
+http://kafka.apache.org/downloads.html
+wget https://archive.apache.org/dist/kafka/2.6.0/kafka_2.12-2.6.0.tgz
+tar -zxvf kafka_2.12-2.6.0.tgz
+### 启动zookeeper
+### 启动Kafka
+cd bin
+./kafka-server-start.sh ../config/server.properties
+### 提示如下既是成功
+[2021-04-24 00:17:58,193] INFO [KafkaServer id=0] started (kafka.server.KafkaServer)
+### 守护进程启动
+mkdir -p /var/log/kafka
+touch /var/log/kafka/log
+nohup ./kafka-server-start.sh ../config/server.properties >/var/log/kafka/log 2>&1 &
+### netstate -ntpl 看端口
+tcp6       0      0 :::9092                 :::*                    LISTEN      6524/java
+```
+
+
+
+### Kafka快捷设置
+
+```bash
+# kafka根目录
+KAFKA_HOME="/root/kafka_install/kafka_2.12-2.6.0"
+# ens192 是网卡名称,必须有IP且通外网
+KAFKA_ADDRESS=`/sbin/ifconfig ens192 | awk '/inet/ {print $2}' | cut -f2 -d ':' |awk 'NR==1 {print $1}'`
+KAFKA_BIND="${KAFKA_ADDRESS}:9092"
+ZK_BIND="${KAFKA_ADDRESS}:2181"
+
+# 列出所有的topic
+alias list_topics="${KAFKA_HOME}/bin/kafka-topics.sh --list --zookeeper ${ZK_BIND} "
+# 创建topic
+alias create_topic="${KAFKA_HOME}/bin/kafka-topics.sh --create --zookeeper ${ZK_BIND} --replication-factor 1 --partitions 1 --topic "
+# 进入生产shell
+alias kafka_producer="${KAFKA_HOME}/bin/kafka-console-producer.sh --broker-list ${KAFKA_BIND} --topic "
+# 从开始位置消费
+alias kafka_consumer="${KAFKA_HOME}/bin/kafka-console-consumer.sh --bootstrap-server ${KAFKA_BIND} --from-beginning --topic "
+# 显示Key消费
+alias kafka_consumer_key="${KAFKA_HOME}/bin/kafka-console-consumer.sh --bootstrap-server ${KAFKA_BIND} --from-beginning --property print.key=true --property key.separator=' --- ' --topic "
+# 查看未消费的信息
+alias kafka_consumer_offset="${KAFKA_HOME}/bin/kafka-console-consumer.sh --bootstrap-server ${KAFKA_BIND} --from-beginning --print-offsets --topic "
+```
+
+
+
+
+
+### Kafka异常错误
+
+- KafkaTimeoutError: Timeout after waiting for 10 secs.
+
+  ```yaml
+  # 修改kafka的 config/server.properties文件中：
+  advertised.listeners=PLAINTEXT://IP地址:9092 # 不能是0.0.0.0
+  advertised.host.name=0.0.0.0
+  # 重启kafka服务
+  
+  listeners=PLAINTEXT://:9092
+  # 内网IP
+  host.name=0.0.0.0
+  zookeeper.connect=0.0.0.0:2181
+  ```
+
+  

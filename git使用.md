@@ -9,7 +9,7 @@ git checkout -b dev
 #### 添加远程分支
 
 ```bash
-git remote add origin http://github.com/mochounan/document.git
+git remote add origin http://github.com/xxx/document.git
 ```
 
 

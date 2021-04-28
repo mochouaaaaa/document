@@ -1,0 +1,134 @@
+
+
+```bash
+# 创建elsearch用户, 因为Elasticsearch不支持root用户运行
+useradd elsearch
+su - elsearch
+mkdir -p es_install/es
+cd es_install
+chown elsearch:elsearch es/ -R
+mkdir data logs
+tar -zxvf elasticsearch-7.5.2-linux-x86_64.tar.gz
+# 将config配置覆盖掉到es config/elasticsearch.yaml 配置
+
+# max file descriptors [65535] for elasticsearch process is too low, increase to at least [65536]
+vi /etc/security/limits.conf 
+添加如下内容:
+* soft nofile 65536
+* hard nofile 131072
+* soft nproc 2048
+* hard nproc 4096
+# [3]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+# 设置虚拟内存
+sudo sysctl -w vm.max_map_count=262144
+# 或者
+vi /etc/sysctl.conf 
+# 添加下面配置：
+vm.max_map_count=655360
+# 并执行命令：
+sysctl -p
+# 1]: the default discovery settings are unsuitable for production use; at least one of [discovery.seed_hosts, discovery.seed_providers, cluster.initial_master_nodes] must be configured
+cluster.initial_master_nodes: ["node-1"] #这里的node-1为node-name配置的值
+```
+
+
+
+
+
+### Config配置
+
+```yaml
+# ======================== Elasticsearch Configuration =========================
+#
+# NOTE: Elasticsearch comes with reasonable defaults for most settings.
+#       Before you set out to tweak and tune the configuration, make sure you
+#       understand what are you trying to accomplish and the consequences.
+#
+# The primary way of configuring a node is via this file. This template lists
+# the most important settings you may want to configure for a production cluster.
+#
+# Please consult the documentation for further information on configuration options:
+# https://www.elastic.co/guide/en/elasticsearch/reference/index.html
+#
+# ---------------------------------- Cluster -----------------------------------
+#
+# Use a descriptive name for your cluster:
+#
+cluster.name: elasticsearch
+#
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+node.name: node-1
+#
+# Add custom attributes to the node:
+#
+node.attr.rack: r1
+#
+# ----------------------------------- Paths ------------------------------------
+#
+# Path to directory where to store the data (separate multiple locations by comma):
+# 数据路径
+path.data: /home/elsearch/es_install/es/data
+#
+# Path to log files:
+# 日志路径
+path.logs: /home/elsearch/es_install/es/logs
+#
+# ----------------------------------- Memory -----------------------------------
+#
+# Lock the memory on startup:
+#
+bootstrap.memory_lock: false
+#
+# Make sure that the heap size is set to about half the memory available
+# on the system and that the owner of the process is allowed to use this
+# limit.
+#
+# Elasticsearch performs poorly when the system is swapping the memory.
+#
+# ---------------------------------- Network -----------------------------------
+#
+# Set the bind address to a specific IP (IPv4 or IPv6):
+#
+network.host: 0.0.0.0
+#
+# Set a custom port for HTTP:
+#
+http.port: 9200
+transport.tcp.port: 9300
+#
+# For more information, consult the network module documentation.
+#
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when this node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+#
+#discovery.seed_hosts: ["host1", "host2"]
+#
+# Bootstrap the cluster using an initial set of master-eligible nodes:
+#
+cluster.initial_master_nodes: ["node-1"]
+#
+# For more information, consult the discovery and cluster formation module documentation.
+#
+# ---------------------------------- Gateway -----------------------------------
+#
+# Block initial recovery after a full cluster restart until N nodes are started:
+#
+gateway.recover_after_nodes: 1
+#
+# For more information, consult the gateway module documentation.
+#
+# ---------------------------------- Various -----------------------------------
+#
+# Require explicit names when deleting indices:
+#
+action.destructive_requires_name: true
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+
+```
+
