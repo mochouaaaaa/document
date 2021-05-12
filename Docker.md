@@ -104,10 +104,21 @@ db.createUser({ user: 'admin', pwd: 'P@ssw0rd', roles: [ { role: "userAdminAnyDa
 mongodb://admin:P%40ssw0rd@127.0.0.1:27017  # 需要16进制转义
 db.createUser(
      {
-       user:"root",
+       user:"blogs",
        pwd:"P@ssw0rd",
-       roles:[{role:"root",db:"admin"}]
+       roles:[{role:"dbAdmin",db:"blogs"}]
      }
   )
+  
+read:允许用户读取指定数据库
+readWrite:允许用户读写指定数据库
+dbAdmin：允许用户在指定数据库中执行管理函数，如索引创建、删除，查看统计或访问system.profile
+userAdmin：允许用户向system.users集合写入，可以找指定数据库里创建、删除和管理用户
+clusterAdmin：只在admin数据库中可用，赋予用户所有分片和复制集相关函数的管理权限。
+readAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的读权限
+readWriteAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的读写权限
+userAdminAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的userAdmin权限
+dbAdminAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的dbAdmin权限。
+root：只在admin数据库中可用。超级账号，超级权限
 ```
 
