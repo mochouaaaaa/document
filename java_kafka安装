@@ -98,7 +98,7 @@ alias list_topics="${KAFKA_HOME}/bin/kafka-topics.sh --list --zookeeper ${ZK_BIN
 alias create_topic="${KAFKA_HOME}/bin/kafka-topics.sh --create --zookeeper ${ZK_BIND} --replication-factor 1 --partitions 1 --topic "
 # 进入生产shell
 alias kafka_producer="${KAFKA_HOME}/bin/kafka-console-producer.sh --broker-list ${KAFKA_BIND} --topic "
-# 从开始位置消费
+# 从开始位置读取消费
 alias kafka_consumer="${KAFKA_HOME}/bin/kafka-console-consumer.sh --bootstrap-server ${KAFKA_BIND} --from-beginning --topic "
 # 显示Key消费
 alias kafka_consumer_key="${KAFKA_HOME}/bin/kafka-console-consumer.sh --bootstrap-server ${KAFKA_BIND} --from-beginning --property print.key=true --property key.separator=' --- ' --topic "
