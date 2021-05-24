@@ -29,3 +29,29 @@ git branch -u origin/master master
 git remote set-head origin -a
 ```
 
+
+
+- 删除远程分支
+
+  ```shell
+  git push origin --delete [branch]
+  ```
+
+  
+
+- 新代码指向远程分支
+
+  ```shell
+  git remote add origin [URL]
+  git push --set-upstream origin [远程分支名称]
+  ```
+
+  
+
+- 删除远程分支文件，本地保留
+
+  ```shell
+  git rm -r --cached [文件名或者文件夹名]
+  ```
+
+  
